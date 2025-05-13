@@ -1,0 +1,15 @@
+{
+  "level": 50,
+  "time": 1745831653682,
+  "pid": 40924,
+  "hostname": "4CE446BV4P-NDT",
+  "err": {
+    "type": "FastifyError",
+    "message": "Failed building the validation schema for POST: /api/user/signup, due to error schema is invalid: data/required must be array",
+    "stack": "FastifyError: Failed building the validation schema for POST: /api/user/signup, due to error schema is invalid: data/required must be array\n    at Boot.<anonymous> (C:\\Users\\Admin\\workspace\\private\\express-server\\node_modules\\.pnpm\\fastify@5.3.2\\node_modules\\fastify\\lib\\route.js:392:21)\n    at Object.onceWrapper (node:events:638:28)\n    at Boot.emit (node:events:536:35)\n    at Boot.emit (node:domain:489:12)\n    at C:\\Users\\Admin\\workspace\\private\\express-server\\node_modules\\.pnpm\\avvio@9.1.0\\node_modules\\avvio\\boot.js:102:12\n    at C:\\Users\\Admin\\workspace\\private\\express-server\\node_modules\\.pnpm\\avvio@9.1.0\\node_modules\\avvio\\boot.js:437:7\n    at done (C:\\Users\\Admin\\workspace\\private\\express-server\\node_modules\\.pnpm\\avvio@9.1.0\\node_modules\\avvio\\lib\\plugin.js:228:5)\n    at check (C:\\Users\\Admin\\workspace\\private\\express-server\\node_modules\\.pnpm\\avvio@9.1.0\\node_modules\\avvio\\lib\\plugin.js:252:9)\n    at node:internal/process/task_queues:140:7\n    at AsyncResource.runInAsyncScope (node:async_hooks:206:9)",
+    "code": "FST_ERR_SCH_VALIDATION_BUILD",
+    "name": "FastifyError",
+    "statusCode": 500
+  },
+  "msg": "Failed building the validation schema for POST: /api/user/signup, due to error schema is invalid: data/required must be array"
+}
