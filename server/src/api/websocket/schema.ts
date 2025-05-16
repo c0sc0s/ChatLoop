@@ -13,11 +13,28 @@ export const FriendMessageType = {
 } as const;
 
 export type FriendMessageType = (typeof FriendMessageType)[keyof typeof FriendMessageType];
+
+// 添加聊天消息类型
+export const ChatMessageType = {
+  send: "chat:send",                 // 发送消息
+  sent: "chat:sent",                 // 消息已发送确认
+  received: "chat:received",         // 接收到新消息
+  mark_read: "chat:mark_read",       // 标记消息为已读
+  read: "chat:read",                 // 消息已被阅读通知
+  read_confirmed: "chat:read_confirmed", // 已读确认
+  typing: "chat:typing",             // 正在输入状态
+  history: "chat:history"            // 请求历史消息
+} as const;
+
+export type ChatMessageType = (typeof ChatMessageType)[keyof typeof ChatMessageType];
+
 export const MessageType = {
   connection: "connection",
   error: "error",
   message: "message",
   ping: "ping",
+  // 集成聊天消息类型
+  ...ChatMessageType
 } as const;
 
 export type MessageType = (typeof MessageType)[keyof typeof MessageType];

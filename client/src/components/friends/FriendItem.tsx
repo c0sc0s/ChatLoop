@@ -12,11 +12,12 @@ export function FriendItem({
   onDelete,
   onSendMessage,
   isDeleting,
+  isCreatingChat = false,
 }: FriendItemProps) {
   return (
     <div className="flex items-center gap-4 px-3 py-2 hover:bg-muted/50 transition rounded-md">
       <Avatar className="w-10 h-10 border">
-        <AvatarImage src={friend.avatar} />
+        <AvatarImage src={friend.avatar || ""} />
         <AvatarFallback>
           {friend.username.slice(0, 2).toUpperCase()}
         </AvatarFallback>
@@ -27,7 +28,7 @@ export function FriendItem({
           <FriendStatusBadge status={friend.status} />
         </div>
         <div className="text-xs text-muted-foreground mt-0.5">
-          上次在线：{new Date(friend.lastActiveAt).toLocaleString()}
+          上次在线：{new Date(friend.lastActiveAt || "").toLocaleString()}
         </div>
       </div>
       <div className="flex gap-1">
@@ -35,14 +36,20 @@ export function FriendItem({
           size="sm"
           variant="outline"
           onClick={() => onSendMessage(friend.id)}
+          disabled={isCreatingChat}
         >
-          <Forward className="size-3.5 mr-1" /> 发消息
+          {isCreatingChat ? (
+            <Loader2 className="size-3.5 mr-1 animate-spin" />
+          ) : (
+            <Forward className="size-3.5 mr-1" />
+          )}
+          发消息
         </Button>
         <Button
           size="sm"
           variant="destructive"
           onClick={() => onDelete(friend.id)}
-          disabled={isDeleting}
+          disabled={isDeleting || isCreatingChat}
         >
           {isDeleting ? (
             <Loader2 className="size-3.5 mr-1 animate-spin" />

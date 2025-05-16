@@ -31,6 +31,7 @@ export interface FriendItemProps {
   onDelete: (friendId: number) => void;
   onSendMessage: (friendId: number) => void;
   isDeleting: boolean;
+  isCreatingChat?: boolean;
 }
 
 /**
@@ -43,6 +44,7 @@ export interface FriendListProps {
   onDeleteFriend: (friendId: number) => void;
   onSendMessage: (friendId: number) => void;
   isDeletingFriend: Record<number, boolean>;
+  isCreatingChat?: Record<number, boolean>;
 }
 
 /**

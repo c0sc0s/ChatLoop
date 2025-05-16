@@ -14,6 +14,7 @@ export function FriendList({
   onDeleteFriend,
   onSendMessage,
   isDeletingFriend,
+  isCreatingChat = {},
 }: FriendListProps) {
   return (
     <main className="flex-1 overflow-y-auto h-full flex flex-col">
@@ -47,6 +48,7 @@ export function FriendList({
                 onDelete={onDeleteFriend}
                 onSendMessage={onSendMessage}
                 isDeleting={isDeletingFriend[friend.id] || false}
+                isCreatingChat={isCreatingChat[friend.id] || false}
               />
             </li>
           ))}

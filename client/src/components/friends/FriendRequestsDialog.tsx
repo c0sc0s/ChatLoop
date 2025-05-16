@@ -22,6 +22,7 @@ import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { type FriendRequestsDialogProps } from "./types";
 import type { FriendRequest, SentFriendRequest } from "@/common/types/friends";
+import type { FriendRequestItem } from "@/common/types/friends";
 
 /**
  * 好友请求对话框组件
@@ -42,16 +43,31 @@ export function FriendRequestsDialog({
     Record<number, boolean>
   >({});
 
+  // 将API返回的FriendRequestItem转换为组件需要的FriendRequest类型
+  const convertToFriendRequest = (item: FriendRequestItem): FriendRequest => ({
+    id: item.id,
+    sender: {
+      id: item.user.id,
+      username: item.user.username,
+      avatar: item.user.avatar || "",
+    },
+    createdAt: item.createdAt,
+  });
+
   // 加载请求列表
   const loadRequests = async () => {
     setIsLoading(true);
     try {
-      const [receivedRes, sentRes] = await Promise.all([
-        getFriendRequests(),
-        getSentFriendRequests(),
-      ]);
-      setReceivedRequests(receivedRes.requests);
-      setSentRequests(sentRes.requests);
+      const receivedRes = await getFriendRequests();
+      // 转换API返回的数据格式为组件需要的格式
+      const convertedRequests = receivedRes.requests.map(
+        convertToFriendRequest
+      );
+      setReceivedRequests(convertedRequests);
+
+      // 暂时注释掉发送请求的部分，等接收请求处理好之后再处理
+      // const sentRes = await getSentFriendRequests();
+      // setSentRequests(sentRes.requests);
     } catch (error) {
       toast.error("获取好友请求失败", { description: String(error) });
     } finally {

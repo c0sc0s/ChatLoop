@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react";
 import { getFriends, deleteFriend } from "@/api/friends";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
+import { createConversation } from "@/api/chat";
 import {
   AddFriendDialog,
   FriendGroupNav,
@@ -13,10 +15,14 @@ import {
  * 好友页面
  */
 export default function Friends() {
+  const navigate = useNavigate();
   const [friendGroups, setFriendGroups] = useState<FriendGroup[]>([]);
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isCreatingChat, setIsCreatingChat] = useState<Record<number, boolean>>(
+    {}
+  );
   const [isDeletingFriend, setIsDeletingFriend] = useState<
     Record<number, boolean>
   >({});
@@ -82,9 +88,26 @@ export default function Friends() {
   };
 
   // 发送消息
-  const handleSendMessage = (friendId: number) => {
-    // TODO: 实现发送消息功能
-    toast.info(`即将开始与 ID 为 ${friendId} 的好友聊天`);
+  const handleSendMessage = async (friendId: number) => {
+    setIsCreatingChat((prev) => ({ ...prev, [friendId]: true }));
+    try {
+      // 创建一个与该好友的私聊会话
+      const response = await createConversation({
+        participantIds: [friendId],
+        type: "direct",
+      });
+
+      // 导航到聊天页面
+      if (response && response.conversation) {
+        navigate(`/chatlist/${response.conversation.id}`);
+      } else {
+        toast.error("创建会话失败");
+      }
+    } catch (error) {
+      toast.error("创建会话失败", { description: String(error) });
+    } finally {
+      setIsCreatingChat((prev) => ({ ...prev, [friendId]: false }));
+    }
   };
 
   // 组件加载时获取好友列表
@@ -111,6 +134,7 @@ export default function Friends() {
           onDeleteFriend={handleDeleteFriend}
           onSendMessage={handleSendMessage}
           isDeletingFriend={isDeletingFriend}
+          isCreatingChat={isCreatingChat}
         />
       </div>
 

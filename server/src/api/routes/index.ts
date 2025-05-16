@@ -5,6 +5,7 @@ import authRoutes from "./auth";
 import userRoutes from "./user";
 import healthRoutes from "./health";
 import friendRoutes from "./friends";
+import chatRoutes from "./chat";
 
 interface RouteConfig {
   prefix?: string;
@@ -23,6 +24,10 @@ const routeConfigs: RouteConfig[] = [
   {
     prefix: "/friends",
     routes: friendRoutes,
+  },
+  {
+    prefix: "/chat",
+    routes: chatRoutes,
   },
   {
     routes: healthRoutes,
