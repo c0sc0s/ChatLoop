@@ -1,5 +1,5 @@
 // src/pages/ChatList/ChatSidebar.tsx
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useEffect, useCallback } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
@@ -12,22 +12,24 @@ import type {
 } from "@/common/types/chat";
 
 export default function ChatSidebar() {
-  const currentUser = useUserStore((state) => state.user);
+  const { user: currentUser } = useUserStore();
 
   // 使用chat store - 通过选择具体的状态来避免不必要的重渲染
-  const conversations = useChatStore((state) => state.conversations);
-  const isLoadingConversations = useChatStore(
-    (state) => state.isLoadingConversations
-  );
-  const fetchConversations = useChatStore((state) => state.fetchConversations);
+  const { conversations, isLoadingConversations, fetchConversations } =
+    useChatStore();
 
-  // 获取会话列表
+  // 获取会话列表 - 仅在组件挂载和当前用户变化时执行
   useEffect(() => {
     fetchConversations();
-    // 可以考虑添加定时刷新或WebSocket连接
-    // 例如: const intervalId = setInterval(fetchConversations, 30000);
-    // return () => clearInterval(intervalId);
-  }, [fetchConversations]);
+
+    // 定期刷新会话列表以确保显示最新状态
+    // 当WebSocket收到新消息会自动更新会话列表，但这是额外保障
+    const refreshInterval = setInterval(() => {
+      fetchConversations();
+    }, 60000); // 每分钟更新一次
+
+    return () => clearInterval(refreshInterval);
+  }, [fetchConversations, currentUser?.id]);
 
   // 获取会话中的另一个参与者（对于私聊）
   const getOtherParticipant = useCallback(

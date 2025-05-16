@@ -50,15 +50,6 @@ export const createConversation = async (data: CreateConversationInput): Promise
 };
 
 /**
- * 发送消息到指定会话
- * @param data 发送消息参数，包括会话ID、内容、类型等
- * @returns 发送的消息
- */
-export const sendMessage = async (data: SendMessageInput): Promise<MessageSchema> => {
-  return await Request.post(`/chat/messages`, data);
-};
-
-/**
  * 标记会话中的消息为已读状态
  * @param data 标记已读参数，包括会话ID和可选的消息ID列表
  * @returns 更新时间

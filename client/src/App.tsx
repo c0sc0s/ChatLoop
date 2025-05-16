@@ -4,12 +4,21 @@ import { ThemeProvider } from "./components/theme-provider";
 import { Toaster } from "sonner";
 import FullScreenLoader from "./pages/LoadingPage";
 import useAppStore from "./core/store/app";
-import { useAuthInit } from "./core/hooks/init";
+import { useAuthInit } from "./core/hooks/app/init";
+import { useEffect } from "react";
+import WsClient from "./core/ws/client";
 
 function App() {
   useAuthInit();
 
   const hasInit = useAppStore((state) => state.hasInit);
+  const hasLogin = useAppStore((state) => state.hasLogin);
+
+  useEffect(() => {
+    if (hasLogin) {
+      WsClient.init();
+    }
+  }, [hasLogin]);
 
   return (
     <>
@@ -22,7 +31,7 @@ function App() {
 
 function AppContent() {
   return (
-    <main className="h-screen w-screen">
+    <main className="h-screen w-screen flex">
       <Toaster />
       <RouterProvider router={router} />
     </main>

@@ -1,10 +1,9 @@
 // src/pages/ChatList/ChatPanel.tsx
 import { useParams } from "react-router-dom";
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { cn } from "@/lib/utils";
 import {
   Send,
   Phone,
@@ -26,13 +25,13 @@ function ChatMessageMe({ message }: { message: MessageSchema }) {
 
   return (
     <div className="flex items-end gap-2 justify-end">
-      <div className="max-w-xs px-4 py-2 rounded-lg text-sm shadow bg-primary text-primary-foreground rounded-br-none">
-        {content}
+      <div className="max-w-xs px-4 py-2 rounded-lg text-sm shadow bg-primary text-primary-foreground rounded-br-none break-words overflow-hidden">
+        <p className="whitespace-pre-wrap break-words">{content}</p>
         <div className="text-[10px] text-muted-foreground mt-1 text-right">
           {time}
         </div>
       </div>
-      <Avatar className="size-10">
+      <Avatar className="size-10 flex-shrink-0">
         <AvatarImage src={sender.avatar || undefined} />
         <AvatarFallback>{sender.username[0]}</AvatarFallback>
       </Avatar>
@@ -49,12 +48,12 @@ function ChatMessageOther({ message }: { message: MessageSchema }) {
 
   return (
     <div className="flex items-end gap-2 justify-start">
-      <Avatar className="size-10">
+      <Avatar className="size-10 flex-shrink-0">
         <AvatarImage src={sender.avatar || undefined} />
         <AvatarFallback>{sender.username[0]}</AvatarFallback>
       </Avatar>
-      <div className="max-w-xs px-4 py-2 rounded-lg text-sm shadow bg-muted text-foreground rounded-bl-none">
-        {content}
+      <div className="max-w-xs px-4 py-2 rounded-lg text-sm shadow bg-muted text-foreground rounded-bl-none break-words overflow-hidden">
+        <p className="whitespace-pre-wrap break-words">{content}</p>
         <div className="text-[10px] text-muted-foreground mt-1 text-right">
           {time}
         </div>
@@ -68,54 +67,54 @@ export default function ChatPanel() {
   const conversationId = id ? parseInt(id) : undefined;
   const currentUser = useUserStore((state) => state.user);
   const [input, setInput] = useState("");
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // 使用chat store获取会话和消息状态 - 拆分选择器
-  const currentConversation = useChatStore(
-    (state) => state.currentConversation
-  );
-  const messages = useChatStore((state) =>
-    conversationId ? state.messages[conversationId] || [] : []
-  );
-  const isLoadingCurrentConversation = useChatStore(
-    (state) => state.isLoadingCurrentConversation
-  );
-  const isLoadingMessages = useChatStore((state) =>
-    conversationId ? state.isLoadingMessages[conversationId] || false : false
-  );
-  const isSendingMessage = useChatStore((state) => state.isSendingMessage);
-  const fetchConversation = useChatStore((state) => state.fetchConversation);
-  const sendMessage = useChatStore((state) => state.sendMessage);
+  const {
+    currentConversation,
+    isLoadingCurrentConversation,
+    isSendingMessage,
+    messages,
+    sendMessage,
+    fetchConversation,
+  } = useChatStore();
 
-  // 获取会话详情和消息
+  // 当会话ID (路由参数) 变化时加载新会话
   useEffect(() => {
-    if (!conversationId) return;
+    // 只有在有效的会话ID时才请求
+    if (conversationId) {
+      fetchConversation(conversationId);
+    }
+  }, [id, fetchConversation, conversationId]);
 
-    // 获取会话信息和消息列表
-    fetchConversation(conversationId);
-  }, [conversationId, fetchConversation]);
+  // 当前消息列表的记忆化计算
+  const currentMessages = useMemo(() => {
+    if (!currentConversation) return [];
+    return messages[currentConversation.id] || [];
+  }, [currentConversation, messages]);
 
-  // 处理发送消息
-  const handleSendMessage = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
-      if (!input.trim() || !conversationId || !currentUser) return;
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [currentMessages]);
 
-      try {
-        await sendMessage({
-          conversationId: conversationId,
-          content: input,
-          type: "text",
-        });
-        setInput("");
-      } catch (error) {
-        // 错误处理在store中已实现
-      }
-    },
-    [input, conversationId, currentUser, sendMessage]
-  );
+  const handleSendMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!input.trim() || !conversationId || !currentUser) return;
 
-  // 获取会话对方的用户信息
-  const getOtherParticipant = useCallback(() => {
+    try {
+      await sendMessage({
+        conversationId: conversationId,
+        content: input,
+        type: "text",
+      });
+      setInput("");
+    } catch (error) {
+      // 错误处理在store中已实现
+    }
+  };
+
+  const otherUser = useMemo(() => {
     if (!currentConversation || !currentUser) return null;
     return (
       currentConversation.participants.find((p) => p.userId !== currentUser.id)
@@ -123,8 +122,7 @@ export default function ChatPanel() {
     );
   }, [currentConversation, currentUser]);
 
-  const otherUser = useMemo(() => getOtherParticipant(), [getOtherParticipant]);
-  const isLoading = isLoadingCurrentConversation || isLoadingMessages;
+  const isLoading = isLoadingCurrentConversation;
 
   if (isLoading) {
     return (
@@ -144,9 +142,9 @@ export default function ChatPanel() {
   }
 
   return (
-    <div className="flex flex-col h-full rounded-lg bg-background">
+    <div className="flex flex-col rounded-lg bg-background h-full">
       {/* 顶部栏 */}
-      <div className="flex items-center gap-3 border-b px-6 py-4 justify-between">
+      <div className="flex items-center gap-3 border-b px-6 py-4 justify-between flex-shrink-0 h-16">
         <div className="flex items-center gap-3">
           <Avatar>
             <AvatarImage src={otherUser.avatar || undefined} />
@@ -179,25 +177,28 @@ export default function ChatPanel() {
         </div>
       </div>
       {/* 聊天内容 */}
-      <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4 bg-background rounded-md">
-        {messages.length === 0 ? (
+      <div className="flex-1 overflow-y-auto px-4 py-4 bg-background rounded-md">
+        {currentMessages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
             <p>没有消息记录</p>
             <p className="text-xs mt-1">开始发送消息吧！</p>
           </div>
         ) : (
-          messages.map((message: MessageSchema) =>
-            message.senderId === currentUser?.id ? (
-              <ChatMessageMe key={message.id} message={message} />
-            ) : (
-              <ChatMessageOther key={message.id} message={message} />
-            )
-          )
+          <div className="space-y-4 max-w-full">
+            {currentMessages.map((message: MessageSchema) =>
+              message.senderId === currentUser?.id ? (
+                <ChatMessageMe key={message.id} message={message} />
+              ) : (
+                <ChatMessageOther key={message.id} message={message} />
+              )
+            )}
+            <div className="h-4" ref={messagesEndRef}></div>
+          </div>
         )}
       </div>
       {/* 输入框 */}
       <form
-        className="flex items-center gap-2 border-t px-6 py-4 bg-background"
+        className="flex items-center gap-2 border-t px-4 py-3 bg-background flex-shrink-0 h-16"
         onSubmit={handleSendMessage}
       >
         <div className="flex items-center gap-1 mr-2">
@@ -220,13 +221,23 @@ export default function ChatPanel() {
             <Paperclip className="size-5" />
           </Button>
         </div>
-        <Input
-          className="flex-1"
-          placeholder="输入消息…"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          disabled={isSendingMessage}
-        />
+        <div className="flex-1 relative">
+          <Input
+            className="flex-1 min-h-[40px]"
+            placeholder="输入消息…"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            disabled={isSendingMessage}
+            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                if (input.trim()) {
+                  handleSendMessage(e);
+                }
+              }
+            }}
+          />
+        </div>
         <Button
           type="submit"
           disabled={!input.trim() || isSendingMessage}

@@ -1,9 +1,17 @@
 import { FastifyInstance } from "fastify";
 import generateConnectionId from "./utils";
-import WebSocketPlugin, { type WebSocket } from "@fastify/websocket";
+import WebSocketPlugin, { WebSocket } from "@fastify/websocket";
 import { getUserInfoFromToken } from "../plugins/auth";
 import { MessageSchema, MessageType } from "./schema";
 import { wsEventBus } from "./wsEventBus";
+
+// 定义WebSocket的就绪状态常量，避免直接使用WebSocket.OPEN
+const WS_READY_STATE = {
+  CONNECTING: 0,
+  OPEN: 1,
+  CLOSING: 2,
+  CLOSED: 3
+};
 
 export const WS_URL = "/ws/connect";
 const PING_INTERVAL = 30000;
@@ -65,7 +73,7 @@ class WebSocketManager {
   private _heartBeat(socket: WebSocket, userId: string) {
     // 设置ping间隔
     const pingInterval = setInterval(() => {
-      if (socket.readyState === WebSocket.OPEN) {
+      if (socket.readyState === WS_READY_STATE.OPEN) {
         this._sendMessage(socket, userId, {
           type: MessageType.ping,
           data: { timestamp: Date.now() }

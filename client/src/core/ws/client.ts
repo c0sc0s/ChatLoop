@@ -1,8 +1,11 @@
 import clientLocalStorage from "@/core/util/localStorage";
 import type { IWsMessage } from "./type";
 import wsEventBus from "./wsEventBus";
+import { WsConnectionStatus } from "../store/app";
+import useAppStore from "../store/app";
+import "./handlers";
 
-const wsUrl = "ws://localhost:3001/ws_connect";
+const wsUrl = "ws://localhost:3001/ws/connect";
 
 class WsClient {
   public static instance: WsClient;
@@ -34,6 +37,7 @@ class WsClient {
   }
 
   private _openHandler() {
+    useAppStore.setState({ wsConnectionStatus: WsConnectionStatus.CONNECTED });
     console.log("WebSocket连接成功");
   }
 
@@ -56,7 +60,6 @@ class WsClient {
     }
     this.ws.send(JSON.stringify(msgInfo));
   }
-
 }
 
 const wsClient = WsClient.getInstance();
