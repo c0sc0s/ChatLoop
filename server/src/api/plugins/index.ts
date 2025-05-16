@@ -1,6 +1,5 @@
 import dbPlugin from "./db";
 import authPlugin from "./auth";
-import websocketPlugin from "./websocket";
 import corsPlugin from "./cors";
 import { FastifyInstance } from "fastify";
 import { publicPaths } from "../config";
@@ -17,9 +16,6 @@ const AppPlugins = [
     options: {
       publicPaths: publicPaths,
     },
-  },
-  {
-    plugin: websocketPlugin,
   },
 ];
 

@@ -5,6 +5,9 @@ import jwt from "jsonwebtoken";
 import response from "@/api/utils/response";
 import { USER_STATUS } from "@/common/const";
 
+/**
+ * 获取当前登录用户信息
+ */
 export async function getMe(request: FastifyRequest, reply: FastifyReply) {
   const { prisma } = request.server;
   const userId = request.user?.id;
@@ -35,7 +38,10 @@ export async function getMe(request: FastifyRequest, reply: FastifyReply) {
     return response.serverError(reply, "获取用户信息失败，请稍后再试");
   }
 }
-// 登录处理
+
+/**
+ * 用户登录处理
+ */
 export async function login(
   request: FastifyRequest<{ Body: LoginInput }>,
   reply: FastifyReply
@@ -91,7 +97,9 @@ export async function login(
   }
 }
 
-// 注册处理
+/**
+ * 用户注册处理
+ */
 const HASH_ROUNDS = 10;
 export async function register(
   request: FastifyRequest<{ Body: RegisterInput }>,
@@ -99,8 +107,6 @@ export async function register(
 ) {
   const { prisma } = request.server;
   const { username, email, password, phone } = request.body;
-
-  console.log(username, email, password, phone);
 
   try {
     // 检查邮箱是否已存在
@@ -121,12 +127,14 @@ export async function register(
       return response.error(reply, "用户名已被使用", 400);
     }
 
-    const existingPhone = await prisma.user.findUnique({
-      where: { phone },
-    });
+    if (phone) {
+      const existingPhone = await prisma.user.findUnique({
+        where: { phone },
+      });
 
-    if (existingPhone) {
-      return response.error(reply, "手机号已被注册", 400);
+      if (existingPhone) {
+        return response.error(reply, "手机号已被注册", 400);
+      }
     }
 
     // 哈希密码
@@ -138,7 +146,7 @@ export async function register(
         username,
         email,
         password: hashedPassword,
-        phone: phone || null, // 确保phone是从请求中获取的
+        phone: phone || null,
         avatar: `https://api.dicebear.com/6.x/avataaars/svg?seed=${username}`, // 生成默认头像
         status: "online",
         lastActiveAt: new Date(),
@@ -168,7 +176,9 @@ export async function register(
   }
 }
 
-// 退出登录处理
+/**
+ * 退出登录处理
+ */
 export async function logout(request: FastifyRequest, reply: FastifyReply) {
   const { prisma } = request.server;
   const userId = request.user?.id;

@@ -7,7 +7,7 @@ import {
 import { loggerConfig } from "./config";
 import "dotenv/config";
 import registerPlugins from "./plugins";
-
+import initWs from "./websocket";
 export const BASE_URL = process.env.BASE_URL || "";
 
 const server = Fastify({
@@ -22,5 +22,7 @@ registerPlugins(server);
 
 // 注册路由
 server.register(routes, { prefix: BASE_URL });
+
+initWs(server);
 
 export { server };

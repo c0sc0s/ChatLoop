@@ -4,7 +4,7 @@ import { ZodTypeProvider } from "fastify-type-provider-zod";
 import authRoutes from "./auth";
 import userRoutes from "./user";
 import healthRoutes from "./health";
-import chatRoutes from "./chat";
+import friendRoutes from "./friends";
 
 interface RouteConfig {
   prefix?: string;
@@ -21,8 +21,8 @@ const routeConfigs: RouteConfig[] = [
     routes: userRoutes,
   },
   {
-    prefix: "/chat",
-    routes: chatRoutes,
+    prefix: "/friends",
+    routes: friendRoutes,
   },
   {
     routes: healthRoutes,

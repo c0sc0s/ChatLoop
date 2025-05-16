@@ -258,11 +258,23 @@ export async function getFriendRequests(
       },
     });
 
-    // 处理请求数据
-    const requests = pendingRequests.map((request) => ({
-      ...request,
-      user: request.initiator,
-    }));
+    // 处理请求数据，确保格式符合friendshipSchema
+    const requests = pendingRequests.map((request) => {
+      return {
+        id: request.id,
+        initiatorId: request.initiatorId,
+        receiverId: request.receiverId,
+        status: request.status,
+        createdAt: request.createdAt,
+        updatedAt: request.updatedAt,
+        user: {
+          id: request.initiator.id,
+          username: request.initiator.username,
+          avatar: request.initiator.avatar,
+          status: request.initiator.status,
+        },
+      };
+    });
 
     return response.success(reply, {
       requests,

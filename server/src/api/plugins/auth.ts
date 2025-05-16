@@ -4,6 +4,7 @@ import response from "../utils/response";
 import jwt from "jsonwebtoken";
 import { BASE_URL } from "../server";
 import { jwtSecret } from "../config";
+import { WS_URL } from "../websocket/wsManger";
 
 interface AuthOptions {
   publicPaths?: string[];
@@ -22,6 +23,8 @@ const authPlugin: FastifyPluginAsync<AuthOptions> = fp(
     );
 
     function isPublicRoute(path: string): boolean {
+      if (path.includes(WS_URL)) return true;
+
       return publicPaths.some((publicPath) => path === publicPath);
     }
 
@@ -45,6 +48,18 @@ const authPlugin: FastifyPluginAsync<AuthOptions> = fp(
   }
 );
 
+export const getUserInfoFromToken = (token: string) => {
+  try {
+    const decoded = jwt.verify(token, jwtSecret) as {
+      userId: number;
+      email: string;
+    };
+    return decoded;
+  } catch (error) {
+    throw new Error("无效的令牌");
+  }
+}
+
 const authenticate = async (request: FastifyRequest, reply: FastifyReply) => {
   try {
     // 验证令牌逻辑
@@ -54,22 +69,12 @@ const authenticate = async (request: FastifyRequest, reply: FastifyReply) => {
     }
 
     const token = authHeader.split(" ")[1];
-
-    // 验证JWT令牌
-    try {
-      const decoded = jwt.verify(token, jwtSecret) as {
-        userId: number;
-        email: string;
-      };
-
-      // 设置用户ID到请求对象
-      request.user = {
-        id: decoded.userId,
-        email: decoded.email,
-      };
-    } catch {
-      throw new Error("无效的令牌");
-    }
+    const decoded = getUserInfoFromToken(token);
+    // 设置用户ID到请求对象
+    request.user = {
+      id: decoded.userId,
+      email: decoded.email,
+    };
   } catch (error) {
     return response.unauthorized(reply, (error as Error).message);
   }
