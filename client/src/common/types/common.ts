@@ -4,8 +4,8 @@
 
 // 分页请求参数
 export interface PaginationParams {
-  page?: string;
-  limit?: string;
+  page?: number;
+  limit?: number;
 }
 
 // 分页响应元数据

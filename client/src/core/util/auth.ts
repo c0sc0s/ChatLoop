@@ -1,6 +1,6 @@
-import type { AuthData, UserData } from "@/types";
-import useUserStore from "@/store/user";
-import useAppStore from "@/store/app";
+import type { AuthData, UserData } from "@/common/types/auth";
+import useUserStore from "@/core/store/user";
+import useAppStore from "@/core/store/app";
 import clientLocalStorage from "./localStorage";
 export const handleAuthSuccess = (data: AuthData) => {
     const { user, token } = data;

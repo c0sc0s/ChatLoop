@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 
-import useAppStore from "@/store/app";
+import useAppStore from "@/core/store/app";
 import { useRef } from "react";
-import UserStore from "@/store/user";
-import clientLocalStorage from "@/util/localStorage";
+import UserStore from "@/core/store/user";
+import clientLocalStorage from "@/core/util/localStorage";
 import { getMe } from "@/api/auth";
-import { UpdateUserStoreData } from "@/util/auth";
+import { UpdateUserStoreData } from "@/core/util/auth";
 
 
 export function useAuthInit() {
