@@ -28,13 +28,31 @@ export const ChatMessageType = {
 
 export type ChatMessageType = (typeof ChatMessageType)[keyof typeof ChatMessageType];
 
+// 添加群组相关的消息类型
+export const GroupMessageType = {
+  created: "group:created",                // 群组创建通知
+  updated: "group:updated",                // 群组信息更新通知
+  deleted: "group:deleted",                // 群组解散通知
+  member_joined: "group:member_joined",    // 成员加入通知
+  member_left: "group:member_left",        // 成员离开通知
+  member_removed: "group:member_removed",  // 成员被移除通知
+  role_changed: "group:role_changed",      // 成员角色变更通知
+  owner_transferred: "group:owner_transferred" // 群主转让通知
+} as const;
+
+export type GroupMessageType = (typeof GroupMessageType)[keyof typeof GroupMessageType];
+
 export const MessageType = {
   connection: "connection",
   error: "error",
   message: "message",
   ping: "ping",
   // 集成聊天消息类型
-  ...ChatMessageType
+  ...ChatMessageType,
+  // 集成群组消息类型
+  ...GroupMessageType,
+  // 集成好友消息类型
+  ...FriendMessageType
 } as const;
 
 export type MessageType = (typeof MessageType)[keyof typeof MessageType];
