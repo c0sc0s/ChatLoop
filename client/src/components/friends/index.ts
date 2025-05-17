@@ -8,4 +8,6 @@ export * from "./ReceivedRequestItem";
 export * from "./ReceivedRequestList";
 export * from "./SentRequestItem";
 export * from "./SentRequestList";
-export * from "./types"; 
+export * from "./types";
+export * from "./FriendRequestsButton";
+export * from "./CreateGroupButton"; 

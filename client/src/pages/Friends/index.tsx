@@ -10,6 +10,7 @@ import {
   FriendList,
   type FriendGroup,
 } from "@/components/friends";
+import { FriendRequestsButton } from "@/components/friends/FriendRequestsButton";
 
 /**
  * 好友页面
@@ -127,15 +128,27 @@ export default function Friends() {
 
       {/* 右侧好友列表 */}
       <div className="flex-1 flex flex-col">
-        <FriendList
-          group={currentGroup}
-          isLoading={isLoading}
-          onAddFriend={() => setAddDialogOpen(true)}
-          onDeleteFriend={handleDeleteFriend}
-          onSendMessage={handleSendMessage}
-          isDeletingFriend={isDeletingFriend}
-          isCreatingChat={isCreatingChat}
-        />
+        <div className="p-4 border-b flex items-center justify-between h-14">
+          <h2 className="text-lg font-semibold">
+            {currentGroup?.name || "好友列表"}
+            <span className="ml-2 text-sm text-muted-foreground">
+              ({currentGroup?.friends.length || 0})
+            </span>
+          </h2>
+          <FriendRequestsButton onRequestsUpdated={fetchFriendList} />
+        </div>
+
+        <div className="flex-1 overflow-y-auto">
+          <FriendList
+            group={currentGroup}
+            isLoading={isLoading}
+            onAddFriend={() => setAddDialogOpen(true)}
+            onDeleteFriend={handleDeleteFriend}
+            onSendMessage={handleSendMessage}
+            isDeletingFriend={isDeletingFriend}
+            isCreatingChat={isCreatingChat}
+          />
+        </div>
       </div>
 
       {/* 添加好友对话框 */}

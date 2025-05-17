@@ -1,10 +1,9 @@
-import { UserCheck, UserPlus } from "lucide-react";
+import { UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { type FriendGroup } from "./types";
-import { FriendRequestsDialog } from "./FriendRequestsDialog";
-import { useState } from "react";
+import { CreateGroupButton } from "./CreateGroupButton";
 
 interface FriendGroupNavProps {
   groups: FriendGroup[];
@@ -22,11 +21,6 @@ export function FriendGroupNav({
   onSelectGroup,
   onAddFriend,
 }: FriendGroupNavProps) {
-  const [requestsDialogOpen, setRequestsDialogOpen] = useState(false);
-  const fetchFriendList = () => {
-    // TODO: 实现好友列表的刷新
-  };
-
   return (
     <aside className="w-56 border-r bg-background/80 flex flex-col py-4">
       <div className="px-6 pb-4 text-lg font-bold">好友列表</div>
@@ -56,26 +50,12 @@ export function FriendGroupNav({
         ))}
       </nav>
       <div className="px-4 pt-4 mt-auto flex flex-col gap-3">
-        <Button
-          variant="secondary"
-          size="sm"
-          className="text-primary w-full"
-          onClick={() => setRequestsDialogOpen(true)}
-        >
-          <UserCheck className="w-4 h-4 mr-2" />
-          好友请求
-        </Button>
+        <CreateGroupButton />
         <Button className="w-full" onClick={onAddFriend}>
           <UserPlus className="size-4 mr-2" />
           添加好友
         </Button>
       </div>
-      {/* 好友请求对话框 */}
-      <FriendRequestsDialog
-        open={requestsDialogOpen}
-        onOpenChange={setRequestsDialogOpen}
-        onRequestsUpdated={fetchFriendList}
-      />
     </aside>
   );
 }

@@ -1,7 +1,7 @@
 import * as React from "react";
 import {
   BarChartIcon,
-  ListIcon,
+  CherryIcon,
   MessageCircle,
   SettingsIcon,
   UsersIcon,
@@ -32,7 +32,7 @@ const data = {
     {
       title: "聊天列表",
       url: "/chatlist",
-      icon: ListIcon,
+      icon: MessageCircle,
     },
     {
       title: "好友列表",
@@ -58,7 +58,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
               <NavLink to="/home" className="flex items-center gap-2">
-                <MessageCircle />
+                <CherryIcon />
                 <span className="text-base font-semibold">ChatFocus</span>
                 <WsStatus />
               </NavLink>

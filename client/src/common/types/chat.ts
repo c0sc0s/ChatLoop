@@ -73,6 +73,9 @@ export interface MessageSchema {
 export interface ConversationSchema {
   id: number;
   type: string;
+  name?: string; // 群组名称，仅群聊有效
+  avatar?: string | null; // 群组头像，仅群聊有效
+  description?: string | null; // 群组描述，仅群聊有效
   lastMessageAt: string | null;
   createdAt: string;
   participants: ParticipantSchema[];
