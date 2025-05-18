@@ -6,47 +6,48 @@ import Home from "@/pages/Home";
 import Friends from "@/pages/Friends";
 import Setting from "@/pages/Setting";
 import RequireAuth from "./auth";
-import EmptyChatHint from "@/pages/ChatList/EmptyChat";
-import ChatLayout from "@/pages/ChatList/ChatLayout";
-import ChatPanel from "@/pages/ChatList/ChatPanel";
+import EmptyChatHint from "@/pages/ChatList/chat/panel/EmptyChat";
+import ChatPanel from "@/pages/ChatList/chat/panel/ChatPanel";
 import QuickStartVedio from "@/pages/QuickStartVedio/QuickStartVedio";
+import ChatLayout from "@/pages/ChatList/ChatLayout";
 
 const router = createBrowserRouter([
-
-    {
-        path: "/",
-        element: <RequireAuth><Layout /></RequireAuth>,
+  {
+    path: "/",
+    element: (
+      <RequireAuth>
+        <Layout />
+      </RequireAuth>
+    ),
+    children: [
+      { path: "home", element: <Home /> },
+      {
+        path: "/chatlist",
+        element: <ChatLayout />, // 左侧列表+右侧内容
         children: [
-            { path: "home", element: <Home /> },
-            {
-                path: "/chatlist",
-                element: <ChatLayout />, // 左侧列表+右侧内容
-                children: [
-                    { index: true, element: <EmptyChatHint /> }, // 没选中会话
-                    { path: ":id", element: <ChatPanel /> },     // 选中会话
-                ]
-            },
-            { path: "friends", element: <Friends /> },
-            { path: "setting", element: <Setting /> },
-            { path: "quick-start-vedio", element: <QuickStartVedio /> },
-            { index: true, element: <Navigate to="/home" replace /> }, // 这里重定向
+          { index: true, element: <EmptyChatHint /> }, // 没选中会话
+          { path: ":id", element: <ChatPanel /> }, // 选中会话
         ],
-
-    },
-    {
-        path: "/auth",
-        children: [
-            {
-                path: "login",
-                element: <LoginPage />,
-            },
-            {
-                path: "register",
-                element: <RegisterPage />,
-            }
-        ]
-    }
-
+      },
+      { path: "friends", element: <Friends /> },
+      { path: "setting", element: <Setting /> },
+      { path: "quick-start-vedio", element: <QuickStartVedio /> },
+      { index: true, element: <Navigate to="/home" replace /> }, // 这里重定向
+    ],
+  },
+  {
+    path: "/auth",
+    children: [
+      {
+        path: "login",
+        element: <LoginPage />,
+      },
+      {
+        path: "register",
+        element: <RegisterPage />,
+      },
+    ],
+  },
 ]);
 
 export default router;

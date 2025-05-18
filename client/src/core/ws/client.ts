@@ -1,9 +1,9 @@
 import clientLocalStorage from "@/core/util/localStorage";
-import type { IWsMessage } from "./type";
 import wsEventBus from "./wsEventBus";
 import { WsConnectionStatus } from "../store/app";
 import useAppStore from "../store/app";
 import "./handlers";
+import type { IWsMessage } from "./type";
 
 const wsUrl = "ws://localhost:3001/ws/connect";
 
@@ -42,7 +42,7 @@ class WsClient {
   }
 
   private _messageHandler(event: MessageEvent) {
-    const msgInfo = JSON.parse(event.data) as IWsMessage;
+    const msgInfo = JSON.parse(event.data);
     wsEventBus.emit(msgInfo.type, msgInfo.data);
   }
 

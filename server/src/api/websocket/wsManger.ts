@@ -69,6 +69,11 @@ class WebSocketManager {
     })
   }
 
+  isUserOnline(userId: string): boolean {
+    const connections = this._connections.get(userId);
+    return !!connections && connections.size > 0;
+  }
+
   // 添加心跳检测
   private _heartBeat(socket: WebSocket, userId: string) {
     // 设置ping间隔

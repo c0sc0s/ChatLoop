@@ -7,6 +7,7 @@ import healthRoutes from "./health";
 import friendRoutes from "./friends";
 import chatRoutes from "./chat";
 import groupRoutes from "./groups";
+import rtcRoutes from "./rtc";
 
 interface RouteConfig {
   prefix?: string;
@@ -33,6 +34,10 @@ const routeConfigs: RouteConfig[] = [
   {
     prefix: "/groups",
     routes: groupRoutes,
+  },
+  {
+    prefix: "/rtc",
+    routes: rtcRoutes,
   },
   {
     routes: healthRoutes,

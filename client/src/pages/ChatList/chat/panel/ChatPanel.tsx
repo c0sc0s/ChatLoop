@@ -3,12 +3,9 @@ import { useParams } from "react-router-dom";
 import { useEffect, useMemo } from "react";
 import useUserStore from "@/core/store/user";
 import useChatStore from "@/core/store/chat";
-import {
-  ChatHeader,
-  ChatInput,
-  ChatMessageList,
-  ChatMessageListSkeleton,
-} from "@/components/chat";
+import { ChatHeader } from "./ChatHeader";
+import { ChatInput } from "./ChatInput";
+import { ChatMessageList, ChatMessageListSkeleton } from "./ChatMessageList";
 
 export default function ChatPanel() {
   const { id } = useParams();

@@ -42,6 +42,19 @@ export const GroupMessageType = {
 
 export type GroupMessageType = (typeof GroupMessageType)[keyof typeof GroupMessageType];
 
+// 添加视频通话相关的消息类型
+export const VideoCallMessageType = {
+  offer: "call:offer",               // 发起通话请求
+  answer: "call:answer",             // 接受通话请求
+  ice_candidate: "call:ice_candidate", // ICE候选交换
+  hang_up: "call:hang_up",           // 结束通话
+  reject: "call:reject",             // 拒绝通话
+  busy: "call:busy",                 // 忙线
+  not_available: "call:not_available" // 对方不在线
+} as const;
+
+export type VideoCallMessageType = (typeof VideoCallMessageType)[keyof typeof VideoCallMessageType];
+
 export const MessageType = {
   connection: "connection",
   error: "error",
@@ -52,7 +65,9 @@ export const MessageType = {
   // 集成群组消息类型
   ...GroupMessageType,
   // 集成好友消息类型
-  ...FriendMessageType
+  ...FriendMessageType,
+  // 集成视频通话消息类型
+  ...VideoCallMessageType
 } as const;
 
 export type MessageType = (typeof MessageType)[keyof typeof MessageType];

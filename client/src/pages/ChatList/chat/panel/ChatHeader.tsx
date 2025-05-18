@@ -1,13 +1,8 @@
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import {
-  Phone,
-  Video,
-  MoreVertical,
-  Users,
-  MoreHorizontal,
-} from "lucide-react";
+import { Phone, Video, MoreHorizontal } from "lucide-react";
 import type { ConversationSchema } from "@/common/types/chat";
+import rtcService from "@/core/store/rtc/service";
+import { CallType } from "@/core/store/rtc/state";
 
 interface ChatHeaderProps {
   currentConversation: ConversationSchema;
@@ -32,26 +27,9 @@ export function ChatHeader({
   otherUser,
 }: ChatHeaderProps) {
   if (!currentConversation) return null;
-
-  // 渲染头像部分
-  const renderAvatar = () => {
-    if (isGroupChat) {
-      return (
-        <>
-          <AvatarImage src={groupInfo?.avatar || undefined} />
-          <AvatarFallback>
-            <Users className="h-5 w-5" />
-          </AvatarFallback>
-        </>
-      );
-    }
-
-    return (
-      <>
-        <AvatarImage src={otherUser?.avatar || undefined} />
-        <AvatarFallback>{otherUser?.username?.[0] || "?"}</AvatarFallback>
-      </>
-    );
+  const handleVideoCallClick = () => {
+    if (!otherUser) return;
+    rtcService.startCall(otherUser.id.toString(), CallType.VIDEO);
   };
 
   // 渲染名称和状态部分
@@ -85,7 +63,12 @@ export function ChatHeader({
         <Button size="icon" variant="ghost" title="语音通话">
           <Phone className="size-5" />
         </Button>
-        <Button size="icon" variant="ghost" title="视频通话">
+        <Button
+          size="icon"
+          variant="ghost"
+          onClick={handleVideoCallClick}
+          title="视频通话"
+        >
           <Video className="size-6" />
         </Button>
         <Button size="icon" variant="ghost">

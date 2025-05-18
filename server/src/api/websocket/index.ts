@@ -3,6 +3,7 @@ import getWebSocketManager from './wsManger';
 import { wsEventBus } from './wsEventBus';
 
 import './handlers';
+
 export const initWs = (app: FastifyInstance) => {
   wsEventBus.setFastify(app);
 
