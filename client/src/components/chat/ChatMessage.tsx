@@ -1,6 +1,6 @@
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import type { MessageSchema } from "@/common/types/chat";
+import { StatusAvatar } from "@/components/ui/status-avatar";
 
 interface ChatMessageProps {
   message: MessageSchema;
@@ -31,10 +31,11 @@ export function ChatMessage({
       >
         {/* 非自己发送的消息，左侧显示头像 */}
         {!isMe && (
-          <Avatar className="size-10 flex-shrink-0">
-            <AvatarImage src={sender.avatar || undefined} />
-            <AvatarFallback>{sender.username[0]}</AvatarFallback>
-          </Avatar>
+          <StatusAvatar
+            src={sender.avatar || undefined}
+            fallback={sender.username[0]}
+            className="size-10 flex-shrink-0"
+          />
         )}
 
         {/* 消息气泡内容 */}
@@ -46,7 +47,7 @@ export function ChatMessage({
           )}
           <div
             className={cn(
-              "max-w-xs px-4 py-2 rounded-lg text-sm shadow break-words overflow-hidden",
+              "max-w-md px-4 py-2 rounded-lg text-sm shadow break-words overflow-hidden",
               isMe
                 ? "bg-lime-800 rounded-tr-none text-white"
                 : "bg-muted text-foreground rounded-tl-none"
@@ -66,10 +67,11 @@ export function ChatMessage({
 
         {/* 自己发送的消息，右侧显示头像 */}
         {isMe && (
-          <Avatar className="size-10 flex-shrink-0">
-            <AvatarImage src={sender.avatar || undefined} />
-            <AvatarFallback>{sender.username[0]}</AvatarFallback>
-          </Avatar>
+          <StatusAvatar
+            src={sender.avatar || undefined}
+            fallback={sender.username[0]}
+            className="size-10 flex-shrink-0"
+          />
         )}
       </div>
     </div>

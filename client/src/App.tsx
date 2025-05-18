@@ -7,6 +7,7 @@ import useAppStore from "./core/store/app";
 import { useAuthInit } from "./core/hooks/app/init";
 import { useEffect } from "react";
 import WsClient from "./core/ws/client";
+import useInitData from "./core/hooks/data/useInit";
 
 function App() {
   useAuthInit();
@@ -20,6 +21,8 @@ function App() {
     }
   }, [hasLogin]);
 
+  useInitData();
+
   return (
     <>
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
@@ -32,7 +35,18 @@ function App() {
 function AppContent() {
   return (
     <main className="h-screen w-screen flex">
-      <Toaster />
+      <Toaster
+        theme="dark"
+        richColors
+        toastOptions={{
+          duration: 2000,
+          className: "text-sm",
+          style: {
+            borderRadius: "6px",
+            overflow: "hidden",
+          },
+        }}
+      />
       <RouterProvider router={router} />
     </main>
   );

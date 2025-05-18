@@ -65,7 +65,7 @@ export function ChatMessageList({
             onClick={() => scrollToBottom(true)}
             className={cn(
               "rounded-full shadow-lg pointer-events-auto",
-              "bg-blue-500 hover:bg-blue-600 text-white flex items-center gap-1 px-3"
+              "bg-lime-600 hover:bg-lime-500 flex items-center gap-1 px-3"
             )}
           >
             <ArrowDown size={16} />

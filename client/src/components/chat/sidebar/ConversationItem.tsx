@@ -1,10 +1,11 @@
 import { NavLink } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Users } from "lucide-react";
+import { Group, Users } from "lucide-react";
 import type { ConversationSchema } from "@/common/types/chat";
-import { useConversation } from "@/hooks";
-
+import { Badge } from "@/components/ui/badge";
+import { StatusAvatar } from "@/components/ui/status-avatar";
+import { useConversation } from "@/core/hooks/useConversation";
 interface ConversationItemProps {
   conversation: ConversationSchema;
 }
@@ -37,18 +38,14 @@ export function ConversationItem({ conversation }: ConversationItemProps) {
           )
         }
       >
-        <Avatar className="size-10">
-          <AvatarImage src={conversationAvatar || undefined} />
-          <AvatarFallback>{renderAvatarFallback()}</AvatarFallback>
-        </Avatar>
+        <StatusAvatar
+          src={conversationAvatar || ""}
+          fallback={renderAvatarFallback()}
+          className="w-10 h-10 border"
+        />
         <div className="flex-1 min-w-0">
           <div className="font-medium truncate flex items-center gap-1">
             {conversationName}
-            {isGroup && (
-              <span className="text-xs bg-primary/10 px-1 rounded text-primary">
-                群
-              </span>
-            )}
           </div>
           <div className="text-xs text-muted-foreground truncate">
             {lastMessagePreview}

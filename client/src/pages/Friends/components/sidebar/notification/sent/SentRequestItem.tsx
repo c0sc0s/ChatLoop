@@ -2,18 +2,17 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { X, Loader2 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { type SentRequestItemProps } from "./types";
+import { X } from "lucide-react";
+import type { SentFriendRequest } from "@/common/types";
+
+interface SentRequestItemProps {
+  request: SentFriendRequest;
+}
 
 /**
  * 发送的好友请求项组件
  */
-export function SentRequestItem({
-  request,
-  onCancel,
-  isCancelling,
-}: SentRequestItemProps) {
+export function SentRequestItem({ request }: SentRequestItemProps) {
   // 请求状态徽章
   const getStatusBadge = () => {
     switch (request.status) {
@@ -60,14 +59,8 @@ export function SentRequestItem({
           size="sm"
           variant="outline"
           className="bg-red-500/10 hover:bg-red-500/20 text-red-600 border-red-200"
-          onClick={() => onCancel(request.id)}
-          disabled={isCancelling}
         >
-          {isCancelling ? (
-            <Loader2 className="w-3.5 h-3.5 mr-1 animate-spin" />
-          ) : (
-            <X className="w-3.5 h-3.5 mr-1" />
-          )}
+          <X className="w-3.5 h-3.5 mr-1" />
           取消
         </Button>
       )}
