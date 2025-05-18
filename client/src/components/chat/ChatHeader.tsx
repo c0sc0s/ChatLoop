@@ -1,6 +1,12 @@
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Phone, Video, MoreVertical, Users } from "lucide-react";
+import {
+  Phone,
+  Video,
+  MoreVertical,
+  Users,
+  MoreHorizontal,
+} from "lucide-react";
 import type { ConversationSchema } from "@/common/types/chat";
 
 interface ChatHeaderProps {
@@ -74,37 +80,17 @@ export function ChatHeader({
 
   return (
     <div className="flex items-center gap-3 border-b-[0.2px] px-6 py-4 justify-between flex-shrink-0 h-17">
+      <div className="flex items-center gap-3">{renderNameAndStatus()}</div>
       <div className="flex items-center gap-3">
-        <Avatar>{renderAvatar()}</Avatar>
-        {renderNameAndStatus()}
-      </div>
-      <div className="flex items-center gap-3">
-        <Button
-          size="icon"
-          variant="ghost"
-          className="rounded"
-          title="语音通话"
-        >
+        <Button size="icon" variant="ghost" title="语音通话">
           <Phone className="size-5" />
         </Button>
-        <Button
-          size="icon"
-          variant="ghost"
-          className="rounded"
-          title="视频通话"
-        >
-          <Video className="size-5" />
+        <Button size="icon" variant="ghost" title="视频通话">
+          <Video className="size-6" />
         </Button>
-        {isGroupChat && (
-          <Button
-            size="icon"
-            variant="ghost"
-            className="rounded"
-            title="群组信息"
-          >
-            <MoreVertical className="size-5" />
-          </Button>
-        )}
+        <Button size="icon" variant="ghost">
+          <MoreHorizontal className="size-5" />
+        </Button>
       </div>
     </div>
   );

@@ -15,7 +15,7 @@ const WsStatus = () => {
     switch (wsConnectionStatus) {
       case WsConnectionStatus.CONNECTED:
         return {
-          color: "bg-green-500",
+          color: "bg-lime-500",
           label: "已连接",
           tooltip: "WebSocket连接已建立，实时消息通道正常",
         };

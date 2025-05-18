@@ -7,6 +7,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { NavLink, useLocation } from "react-router-dom";
+import { cn } from "@/lib/utils";
 
 export function NavMain({
   items,
@@ -22,14 +23,38 @@ export function NavMain({
 
   return (
     <SidebarGroup>
-      <SidebarGroupContent className="flex flex-col gap-2">
-        <SidebarMenu>
+      <SidebarGroupContent>
+        <SidebarMenu className="flex flex-col gap-2">
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton isActive={isActive(item.url)} asChild>
+              <SidebarMenuButton
+                className="h-12"
+                isActive={isActive(item.url)}
+                asChild
+              >
                 <NavLink to={item.url}>
-                  {item.icon && <item.icon />}
-                  <span>{item.title}</span>
+                  <div>
+                    {item.icon && (
+                      <item.icon
+                        size={16}
+                        className={cn(
+                          isActive(item.url)
+                            ? "text-lime-500"
+                            : "text-muted-foreground"
+                        )}
+                      />
+                    )}
+                  </div>
+                  <span
+                    className={cn(
+                      "font-mono font-bold",
+                      isActive(item.url)
+                        ? "text-lime-500"
+                        : "text-muted-foreground"
+                    )}
+                  >
+                    {item.title}
+                  </span>
                 </NavLink>
               </SidebarMenuButton>
             </SidebarMenuItem>

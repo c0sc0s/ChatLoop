@@ -33,7 +33,7 @@ export function ConversationItem({ conversation }: ConversationItemProps) {
         className={({ isActive }) =>
           cn(
             "flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-accent/60 transition",
-            isActive ? "bg-accent text-primary" : ""
+            isActive ? "bg-accent text-primary border-r-2 border-lime-500" : ""
           )
         }
       >

@@ -40,8 +40,7 @@ export function ChatInput({ onSendMessage, isSendingMessage }: ChatInputProps) {
         onSubmit={handleSubmit}
       >
         <Textarea
-          className="border-0 flex-1 resize-none bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
-          style={{ caretColor: "#3b82f6" }}
+          className="border-0 flex-1 resize-none bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 caret-lime-500"
           placeholder="输入消息…"
           value={input}
           onChange={(e) => setInput(e.target.value)}
@@ -49,7 +48,7 @@ export function ChatInput({ onSendMessage, isSendingMessage }: ChatInputProps) {
           onKeyDown={handleKeyDown}
         />
         <div className="flex flex-shrink-0 items-center gap-1 h-[40px] px-2">
-          <div className="flex-1 items-start">
+          <div className="flex-1 items-start gap-2 flex">
             <Button
               type="button"
               size="icon"
@@ -57,7 +56,7 @@ export function ChatInput({ onSendMessage, isSendingMessage }: ChatInputProps) {
               className="rounded-full border"
               title="发送图片"
             >
-              <ImageIcon color="#ccc" className="size-5" />
+              <ImageIcon className="size-5 text-lime-300" />
             </Button>
             <Button
               type="button"
@@ -66,19 +65,19 @@ export function ChatInput({ onSendMessage, isSendingMessage }: ChatInputProps) {
               className="rounded-full border"
               title="发送文件"
             >
-              <Paperclip color="#ccc" className="size-5" />
+              <Paperclip className="size-5 text-lime-300" />
             </Button>
           </div>
           <Button
             type="submit"
             size="sm"
-            className="bg-primary/80"
+            className="bg-lime-500/80 text-white"
             disabled={!input.trim() || isSendingMessage}
           >
             {isSendingMessage ? (
               <Loader2 className="size-4 animate-spin" />
             ) : (
-              <Send className="size-4 " />
+              <Send className="size-4" />
             )}
             发送
           </Button>

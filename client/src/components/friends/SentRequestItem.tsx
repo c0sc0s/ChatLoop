@@ -31,7 +31,7 @@ export function SentRequestItem({
         );
       default:
         return (
-          <Badge className="bg-orange-500/10 text-orange-600 border-orange-200">
+          <Badge className="bg-lime-500/10 text-lime-600 border-lime-200">
             等待接受
           </Badge>
         );

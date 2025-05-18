@@ -25,22 +25,22 @@ import WsStatus from "./WsStatus";
 const data = {
   navMain: [
     {
-      title: "应用数据",
+      title: "Metrics",
       url: "/home",
       icon: BarChartIcon,
     },
     {
-      title: "聊天列表",
+      title: "Chats",
       url: "/chatlist",
       icon: MessageCircle,
     },
     {
-      title: "好友列表",
+      title: "Friends",
       url: "/friends",
       icon: UsersIcon,
     },
     {
-      title: "设置",
+      title: "Setting",
       url: "/setting",
       icon: SettingsIcon,
     },
@@ -58,8 +58,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
               <NavLink to="/home" className="flex items-center gap-2">
-                <CherryIcon />
-                <span className="text-base font-semibold">ChatFocus</span>
+                <div className="size-4">
+                  <CherryIcon className="text-lime-500 w-full h-full" />
+                </div>
+                <span className="text-base font-mono font-bold">CHATFOCUS</span>
                 <WsStatus />
               </NavLink>
             </SidebarMenuButton>

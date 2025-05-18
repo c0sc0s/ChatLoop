@@ -23,16 +23,9 @@ export function ChatMessage({
 
   return (
     <div>
-      {/* 在群聊中显示发送者名称 */}
-      {showSenderInfo && (
-        <div className="pl-12 text-xs text-muted-foreground mb-1">
-          {sender.username}
-        </div>
-      )}
-
       <div
         className={cn(
-          "flex items-end gap-2",
+          "flex items-start gap-2",
           isMe ? "justify-end" : "justify-start"
         )}
       >
@@ -45,22 +38,29 @@ export function ChatMessage({
         )}
 
         {/* 消息气泡内容 */}
-        <div
-          className={cn(
-            "max-w-xs px-4 py-2 rounded-lg text-sm shadow break-words overflow-hidden",
-            isMe
-              ? "bg-blue-500 rounded-br-none text-white"
-              : "bg-muted text-foreground rounded-bl-none"
+        <div>
+          {showSenderInfo && (
+            <div className="text-xs text-muted-foreground mb-1">
+              {sender.username}
+            </div>
           )}
-        >
-          <p className="whitespace-pre-wrap break-words">{content}</p>
           <div
             className={cn(
-              "text-[10px] mt-1 text-right",
-              isMe ? "text-muted" : "text-muted-foreground"
+              "max-w-xs px-4 py-2 rounded-lg text-sm shadow break-words overflow-hidden",
+              isMe
+                ? "bg-lime-800 rounded-tr-none text-white"
+                : "bg-muted text-foreground rounded-tl-none"
             )}
           >
-            {time}
+            <p className="whitespace-pre-wrap break-words">{content}</p>
+            <div
+              className={cn(
+                "text-[10px] mt-1 text-right",
+                isMe ? "text-muted" : "text-muted-foreground"
+              )}
+            >
+              {time}
+            </div>
           </div>
         </div>
 
