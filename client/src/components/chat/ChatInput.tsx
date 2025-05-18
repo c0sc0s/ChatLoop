@@ -33,36 +33,14 @@ export function ChatInput({ onSendMessage, isSendingMessage }: ChatInputProps) {
     }
   };
 
-  // 渲染发送按钮
-  const renderSendButton = () => {
-    // 按钮图标：加载中显示加载图标，否则显示发送图标
-    const buttonIcon = isSendingMessage ? (
-      <Loader2 className="size-4 mr-1 animate-spin" />
-    ) : (
-      <Send className="size-4 mr-1" />
-    );
-
-    return (
-      <Button
-        type="submit"
-        size="sm"
-        className="bg-blue-500 hover:bg-blue-600 text-white"
-        disabled={!input.trim() || isSendingMessage}
-      >
-        {buttonIcon}
-        发送
-      </Button>
-    );
-  };
-
   return (
     <div className="h-42 flex-shrink-0 p-4 pt-0 w-full bg-transparent">
       <form
-        className="group bg-secondary/30 h-full w-full rounded-3xl p-3 flex flex-col border transition-colors duration-200 focus-within:border-blue-500"
+        className="group bg-secondary/30 h-full w-full rounded-3xl p-3 flex flex-col border transition-colors duration-200 focus-within:border-primary/15"
         onSubmit={handleSubmit}
       >
         <Textarea
-          className="border-0 flex-1 resize-none bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 caret-blue-500"
+          className="border-0 flex-1 resize-none bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
           style={{ caretColor: "#3b82f6" }}
           placeholder="输入消息…"
           value={input}
@@ -91,7 +69,19 @@ export function ChatInput({ onSendMessage, isSendingMessage }: ChatInputProps) {
               <Paperclip color="#ccc" className="size-5" />
             </Button>
           </div>
-          {renderSendButton()}
+          <Button
+            type="submit"
+            size="sm"
+            className="bg-primary/80"
+            disabled={!input.trim() || isSendingMessage}
+          >
+            {isSendingMessage ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : (
+              <Send className="size-4 " />
+            )}
+            发送
+          </Button>
         </div>
       </form>
     </div>

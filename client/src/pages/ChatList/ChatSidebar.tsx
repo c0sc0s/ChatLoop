@@ -2,7 +2,7 @@
 import { useEffect, useCallback, useState } from "react";
 import useChatStore from "@/core/store/chat";
 import CreateGroupDialog from "@/components/groups/CreateGroupDialog";
-import { ConversationList, SidebarHeader } from "@/components/sidebar";
+import { ConversationList, SidebarHeader } from "@/components/chat/sidebar";
 import { Button } from "@/components/ui/button";
 import { Plus, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
